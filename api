@@ -5,11 +5,11 @@
 
 MY_PATH="$( cd -P "$( dirname "$0" )" && pwd )"
 
-MY_API_KEY=`cat $MY_PATH/config.api.key`
+MY_API_KEY=`cat $MY_PATH/config_api_key.txt`
 
-MY_DOMAIN_ID=`cat $MY_PATH/config.domain.id`
+MY_DOMAIN_ID=`cat $MY_PATH/config_domain_id.txt`
 
-MY_RESOURCE_ID=`cat $MY_PATH/config.resource.id`
+MY_RESOURCE_ID=`cat $MY_PATH/config_resource_id.txt`
 
 LOG_FILE="$MY_PATH/dns.update.log"
 

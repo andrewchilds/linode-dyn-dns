@@ -16,7 +16,7 @@ You have a internet connection without a fixed IP and a [Linode](http://www.lino
 
 3. Set your API key which can be found at [https://manager.linode.com/profile](https://manager.linode.com/profile):
 
-        $ echo MY_API_KEY > linode-dyn-dns/config.api.key
+        $ echo MY_API_KEY > linode-dyn-dns/config_api_key.txt
 
 4. Get your Domain ID and your Resource ID (your A record). Domain/Resource IDs can be found by running these commands:
 
@@ -25,8 +25,8 @@ You have a internet connection without a fixed IP and a [Linode](http://www.lino
 
 5. Set your API key, Domain ID and Resource ID:
 
-        $ echo DOMAIN_ID > linode-dyn-dns/config.domain.id
-        $ echo RESOURCE_ID > linode-dyn-dns/config.resource.id
+        $ echo DOMAIN_ID > linode-dyn-dns/config_domain_id.txt
+        $ echo RESOURCE_ID > linode-dyn-dns/config_resource_id.txt
 
 6. Set cron to update every 20 minutes:
 
