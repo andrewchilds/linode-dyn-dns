@@ -8,25 +8,25 @@ You have a internet connection without a fixed IP and a [Linode](http://www.lino
 
 ## Instructions
 
-1. Set up a DNS entry in your Linode account for your dynamic IP, such as apartment.domain.com. Take note of
+1. Set up a DNS entry in your Linode account for your dynamic IP, such as apartment.domain.com.
 
 2. Download the code:
 
-        git clone https://github.com/andrewchilds/linode-dyn-dns
+        $ git clone https://github.com/andrewchilds/linode-dyn-dns
 
 3. Set your API key which can be found at [https://manager.linode.com/profile](https://manager.linode.com/profile):
 
-        echo MY_API_KEY > linode-dyn-dns/config.api.key
+        $ echo MY_API_KEY > linode-dyn-dns/config.api.key
 
-4. Get your Domain ID and your Resource ID (your A record). Domain and Resource IDs can be found in the URLs in the DNS manager, or by running these commands:
+4. Get your Domain ID and your Resource ID (your A record). Domain/Resource IDs can be found by running these commands:
 
-        linode-dyn-dns/api list_domains
-        linode-dyn-dns/api list_resources DOMAIN_ID
+        $ linode-dyn-dns/api list_domains
+        $ linode-dyn-dns/api list_resources DOMAIN_ID
 
 5. Set your API key, Domain ID and Resource ID:
 
-        echo DOMAIN_ID > linode-dyn-dns/config.domain.id
-        echo RESOURCE_ID > linode-dyn-dns/config.resource.id
+        $ echo DOMAIN_ID > linode-dyn-dns/config.domain.id
+        $ echo RESOURCE_ID > linode-dyn-dns/config.resource.id
 
 6. Set cron to update every 20 minutes:
 
