@@ -1,0 +1,88 @@
+#!/bin/bash
+
+
+##### NO CONFIGURATION NECESSARY.
+
+MY_PATH="$( cd -P "$( dirname "$0" )" && pwd )"
+
+MY_API_KEY=`cat $MY_PATH/config.api.key`
+
+MY_DOMAIN_ID=`cat $MY_PATH/config.domain.id`
+
+MY_RESOURCE_ID=`cat $MY_PATH/config.resource.id`
+
+LOG_FILE="$MY_PATH/dns.update.log"
+
+CACHED_IP_FILE="$MY_PATH/.cached.ip.txt"
+
+LINODE_API_URL="https://api.linode.com/?api_key=$MY_API_KEY"
+
+
+
+##### IP FUNCTIONS
+
+function get_ip {
+  curl --silent http://checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'
+  # Alternate:
+  # curl --silent http://automation.whatismyip.com/n09230945.asp
+}
+
+function get_cached_ip {
+  touch $CACHED_IP_FILE
+  cat $CACHED_IP_FILE
+}
+
+function update_ip {
+  get_ip > $CACHED_IP_FILE
+}
+
+
+
+##### LINODE API HELPERS
+
+# Retrieves a list of domains in your linode DNS manager.
+function list_domains {
+  echo $(wget -qO- $LINODE_API_URL\&api_action=domain.list)
+}
+
+# Retrieves a list of resources (i.e. subdomains) for a particular domain.
+# @param Domain ID
+function list_resources {
+  [ $# -lt 1 ] && {
+      echo "Usage: linode_get_resources domain" 1>&2;
+      exit 1;
+  }
+  echo $(wget -qO- $LINODE_API_URL\&api_action=domain.resource.list\&DomainID=$1)
+}
+
+# Updates a domain resource.
+# @param Domain ID
+# @param Resource ID
+function update_resource_target {
+  [ $# -lt 2 ] && {
+      echo "Usage: linode_update_resource_target domain resource" 1>&2;
+      exit 1;
+  }
+  echo $(wget -qO- $LINODE_API_URL\&api_action=domain.resource.update\&DomainID=$1\&ResourceID=$2\&TTL_sec=300\&Target="[remote_addr]")
+}
+
+function update_dns {
+  IP_OLD=`get_cached_ip`
+  IP_NEW=`get_ip`
+  if [ "$IP_OLD" == "" ] && [ "$IP_NEW" != "" ]; then
+    IP_OLD=$IP_NEW
+  fi
+
+  if [ "$IP_NEW" != "" ] && [ "$IP_OLD" != "$IP_NEW" ]; then
+    update_resource_target $MY_DOMAIN_ID $MY_RESOURCE_ID
+    echo "IP changed from $IP_OLD to $IP_NEW on `date`" >> $LOG_FILE
+  fi
+}
+
+
+
+##### DO IT
+
+$@
+
+exit 0;

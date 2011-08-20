@@ -1,0 +1,3 @@
+Your Domain ID. Once your API key is in config.api.key, your domain IDs can be found by running:
+
+./api list_domains
