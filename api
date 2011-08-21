@@ -66,7 +66,7 @@ function update_resource_target {
   echo $(wget -qO- $LINODE_API_URL\&api_action=domain.resource.update\&DomainID=$1\&ResourceID=$2\&TTL_sec=300\&Target="[remote_addr]")
 }
 
-function update_dns {
+function update {
   IP_OLD=`get_cached_ip`
   IP_NEW=`get_ip`
   if [ "$IP_OLD" == "" ] && [ "$IP_NEW" != "" ]; then
@@ -77,6 +77,8 @@ function update_dns {
     update_resource_target $MY_DOMAIN_ID $MY_RESOURCE_ID
     echo "IP changed from $IP_OLD to $IP_NEW on `date`" >> $LOG_FILE
   fi
+
+  update_ip
 }
 
 

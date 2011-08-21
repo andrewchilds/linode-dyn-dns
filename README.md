@@ -8,31 +8,31 @@ You have a internet connection without a fixed IP and a [Linode](http://www.lino
 
 ## Instructions
 
-1. Set up a DNS entry in your Linode account for your dynamic IP, such as apartment.domain.com.
+1. Create an A record in Linode's DNS manager.
 
-2. Download the code:
+2. Download the script:
 
         $ git clone https://github.com/andrewchilds/linode-dyn-dns
+        $ cd linode-dyn-dns
 
-3. Set your API key which can be found at [https://manager.linode.com/profile](https://manager.linode.com/profile):
+3. Set your API key, which can be found at [https://manager.linode.com/profile](https://manager.linode.com/profile):
 
-        $ echo MY_API_KEY > linode-dyn-dns/config_api_key.txt
+        $ echo MY_API_KEY > config_api_key.txt
 
 4. Get your Domain ID and your Resource ID (your A record). Domain/Resource IDs can be found by running these commands:
 
-        $ linode-dyn-dns/api list_domains
-        $ linode-dyn-dns/api list_resources DOMAIN_ID
+        $ ./api list_domains
+        $ ./api list_resources DOMAIN_ID
 
 5. Set your API key, Domain ID and Resource ID:
 
-        $ echo DOMAIN_ID > linode-dyn-dns/config_domain_id.txt
-        $ echo RESOURCE_ID > linode-dyn-dns/config_resource_id.txt
+        $ echo DOMAIN_ID > config_domain_id.txt
+        $ echo RESOURCE_ID > config_resource_id.txt
 
-6. Set cron to update every 20 minutes:
+6. Set cron to update every 30 minutes:
 
-        # Minutes   Hr  Dy  Mo  Wd  Command
-        1,21,41   *   *   *   *   /path/to/linode-dyn-dns/api update_ip
-        19,39,59  *   *   *   *   /path/to/linode-dyn-dns/api update_dns
+        # Minutes  Hr  Dy  Mo  Wd  Command
+        0,30       *   *   *   *   /path/to/linode-dyn-dns/api update
 
 7. ![Michael Jackson](http://i.imgur.com/NRmeB.jpg)
 
