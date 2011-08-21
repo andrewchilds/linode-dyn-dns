@@ -36,14 +36,14 @@ You have a internet connection without a fixed IP and a [Linode](http://www.lino
 
 7. ![Michael Jackson](http://i.imgur.com/NRmeB.jpg)
 
-## Notes
+## Technical Notes
 
-* This will set your TTL to 300 (5 minutes).
-* Included are two methods for finding your IP using a remote lookup: dyndns.org (default) and whatismyip.com. If you don't like the idea of relying on an outside service, you could just as easily write your own. For example, in PHP this is all it takes:
+* This will set your TTL to 300.
+* The script tries dyndns.org for the IP lookup, and if that fails, whatismyip.com. If you don't like the idea of relying on an outside service, you could just as easily write your own, for example in PHP:
 
         <?php print $_SERVER['REMOTE_ADDR']; ?>
 
-    Put that in a file called ip.php, upload it to yourdomain.com, and change get_ip to:
+    Put that in a file called ip.php, upload it to yourdomain.com, and change the get_ip function to:
 
         function get_ip {
           curl --silent http://yourdomain.com/ip.php

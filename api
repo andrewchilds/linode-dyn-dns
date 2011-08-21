@@ -22,18 +22,20 @@ LINODE_API_URL="https://api.linode.com/?api_key=$MY_API_KEY"
 ##### IP FUNCTIONS
 
 function get_ip {
-  curl --silent http://checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'
-  # Alternate:
-  # curl --silent http://automation.whatismyip.com/n09230945.asp
+  local IP=`curl --silent http://checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'`
+  [ "$IP" == "" ] && {
+    IP=`curl --silent http://automation.whatismyip.com/n09230945.asp`
+  }
+  [ "$IP" == "" ] && {
+    echo "[`date`] Unable to retrieve IP address!" >> $LOG_FILE
+    exit 1;
+  }
+  echo $IP
 }
 
 function get_cached_ip {
   touch $CACHED_IP_FILE
   cat $CACHED_IP_FILE
-}
-
-function update_ip {
-  get_ip > $CACHED_IP_FILE
 }
 
 
@@ -42,43 +44,44 @@ function update_ip {
 
 # Retrieves a list of domains in your linode DNS manager.
 function list_domains {
-  echo $(wget -qO- $LINODE_API_URL\&api_action=domain.list)
+  echo $(curl --silent $LINODE_API_URL\&api_action=domain.list)
 }
 
 # Retrieves a list of resources (i.e. subdomains) for a particular domain.
 # @param Domain ID
 function list_resources {
-  [ $# -lt 1 ] && {
-      echo "Usage: linode_get_resources domain" 1>&2;
+  [ $# -ne 1 ] && {
+      echo "Usage: list_resources domain" 1>&2;
       exit 1;
   }
-  echo $(wget -qO- $LINODE_API_URL\&api_action=domain.resource.list\&DomainID=$1)
+  echo $(curl --silent $LINODE_API_URL\&api_action=domain.resource.list\&DomainID=$1)
 }
 
 # Updates a domain resource.
 # @param Domain ID
 # @param Resource ID
 function update_resource_target {
-  [ $# -lt 2 ] && {
-      echo "Usage: linode_update_resource_target domain resource" 1>&2;
+  [ $# -ne 2 ] && {
+      echo "Usage: update_resource_target domain resource" 1>&2;
       exit 1;
   }
-  echo $(wget -qO- $LINODE_API_URL\&api_action=domain.resource.update\&DomainID=$1\&ResourceID=$2\&TTL_sec=300\&Target="[remote_addr]")
+  echo $(curl --silent $LINODE_API_URL\&api_action=domain.resource.update\&DomainID=$1\&ResourceID=$2\&TTL_sec=300\&Target="[remote_addr]")
 }
 
 function update {
   IP_OLD=`get_cached_ip`
   IP_NEW=`get_ip`
-  if [ "$IP_OLD" == "" ] && [ "$IP_NEW" != "" ]; then
+
+  [ "$IP_OLD" == "" ] && {
     IP_OLD=$IP_NEW
-  fi
+  }
 
-  if [ "$IP_NEW" != "" ] && [ "$IP_OLD" != "$IP_NEW" ]; then
+  [ "$IP_OLD" != "$IP_NEW" ] && {
     update_resource_target $MY_DOMAIN_ID $MY_RESOURCE_ID
-    echo "IP changed from $IP_OLD to $IP_NEW on `date`" >> $LOG_FILE
-  fi
+    echo "[`date`] IP changed from $IP_OLD to $IP_NEW" >> $LOG_FILE
+  }
 
-  update_ip
+  echo $IP_NEW > $CACHED_IP_FILE
 }
 
 
@@ -86,5 +89,4 @@ function update {
 ##### DO IT
 
 $@
-
 exit 0;
