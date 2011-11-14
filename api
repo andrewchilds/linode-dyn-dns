@@ -65,7 +65,7 @@ function update_resource_target {
       echo "Usage: update_resource_target domain resource" 1>&2;
       exit 1;
   }
-  echo $(curl --silent $LINODE_API_URL\&api_action=domain.resource.update\&DomainID=$1\&ResourceID=$2\&TTL_sec=300\&Target="[remote_addr]")
+  echo $(curl --silent -g $LINODE_API_URL\&api_action=domain.resource.update\&DomainID=$1\&ResourceID=$2\&TTL_sec=300\&Target=[remote_addr])
 }
 
 function update {
