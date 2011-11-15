@@ -72,12 +72,14 @@ function update {
   IP_OLD=`get_cached_ip`
   IP_NEW=`get_ip`
 
-  [ "$IP_OLD" != "$IP_NEW" ] && {
+  [ "$IP_OLD" != "$IP_NEW" ] && [ "$IP_NEW" != "" ] && {
     update_resource_target $MY_DOMAIN_ID $MY_RESOURCE_ID
     echo "[`date`] IP changed from $IP_OLD to $IP_NEW" >> $LOG_FILE
   }
 
-  echo $IP_NEW > $CACHED_IP_FILE
+  [ "$IP_NEW" != "" ] && {
+    echo $IP_NEW > $CACHED_IP_FILE
+  }
 }
 
 
