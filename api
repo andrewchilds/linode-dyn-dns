@@ -5,11 +5,11 @@
 
 MY_PATH="$( cd -P "$( dirname "$0" )" && pwd )"
 
-MY_API_KEY=`cat $MY_PATH/.key`
+MY_API_KEY=`cat $MY_PATH/.key 2>/dev/null`
 
-MY_DOMAIN_ID=`cat $MY_PATH/.domain`
+MY_DOMAIN_ID=`cat $MY_PATH/.domain 2>/dev/null`
 
-MY_RESOURCE_ID=`cat $MY_PATH/.resource`
+MY_RESOURCE_ID=`cat $MY_PATH/.resource 2>/dev/null`
 
 LOG_FILE="$MY_PATH/dns.log"
 
@@ -35,8 +35,7 @@ function get_ip {
 }
 
 function get_cached_ip {
-  touch $CACHED_IP_FILE
-  cat $CACHED_IP_FILE
+  cat $CACHED_IP_FILE 2>/dev/null
 }
 
 
