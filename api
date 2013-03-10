@@ -5,15 +5,15 @@
 
 MY_PATH="$( cd -P "$( dirname "$0" )" && pwd )"
 
-MY_API_KEY=`cat $MY_PATH/config_api_key.txt`
+MY_API_KEY=`cat $MY_PATH/.key`
 
-MY_DOMAIN_ID=`cat $MY_PATH/config_domain_id.txt`
+MY_DOMAIN_ID=`cat $MY_PATH/.domain`
 
-MY_RESOURCE_ID=`cat $MY_PATH/config_resource_id.txt`
+MY_RESOURCE_ID=`cat $MY_PATH/.resource`
 
-LOG_FILE="$MY_PATH/dns.update.log"
+LOG_FILE="$MY_PATH/dns.log"
 
-CACHED_IP_FILE="$MY_PATH/.cached.ip.txt"
+CACHED_IP_FILE="$MY_PATH/.ip"
 
 LINODE_API_URL="https://api.linode.com/?api_key=$MY_API_KEY"
 
@@ -24,10 +24,11 @@ LINODE_API_URL="https://api.linode.com/?api_key=$MY_API_KEY"
 function get_ip {
   local IP=`curl --silent http://checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'`
   [ "$IP" == "" ] && {
+    echo "[`date`] dyndns lookup failed, checking whatismyip..." >> $LOG_FILE
     IP=`curl --silent http://automation.whatismyip.com/n09230945.asp`
   }
   [ "$IP" == "" ] && {
-    echo "[`date`] Unable to retrieve IP address!" >> $LOG_FILE
+    echo "[`date`] whatismyip lookup failed, giving up." >> $LOG_FILE
     exit 1;
   }
   echo $IP

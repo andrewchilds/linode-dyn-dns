@@ -1,5 +1,5 @@
-config_api_key.txt
-config_domain_id.txt
-config_resource_id.txt
-.cached.ip.txt
-dns.update.log
+.key
+.domain
+.resource
+.ip
+dns.log

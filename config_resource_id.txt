@@ -1,3 +1,0 @@
-Your Resource ID (A record). Once your API key is in config.api.key, resource IDs for a particular domain can be found by running:
-
-./api list_resources DOMAIN_ID
