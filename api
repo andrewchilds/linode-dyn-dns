@@ -44,7 +44,7 @@ function get_cached_ip {
 
 # Retrieves a list of domains in your linode DNS manager.
 function list_domains {
-  echo $(curl --silent $LINODE_API_URL\&api_action=domain.list)
+  echo $(curl --silent $LINODE_API_URL\&api_action=domain.list) | python -mjson.tool
 }
 
 # Retrieves a list of resources (i.e. subdomains) for a particular domain.
@@ -54,7 +54,7 @@ function list_resources {
       echo "Usage: list_resources domain" 1>&2;
       exit 1;
   }
-  echo $(curl --silent $LINODE_API_URL\&api_action=domain.resource.list\&DomainID=$1)
+  echo $(curl --silent $LINODE_API_URL\&api_action=domain.resource.list\&DomainID=$1) | python -mjson.tool
 }
 
 # Updates a domain resource.
