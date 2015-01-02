@@ -39,7 +39,7 @@ You have a internet connection without a fixed IP and a [Linode](http://www.lino
 ## Technical Notes
 
 * This will set your TTL to 300.
-* The script tries dyndns.org for the IP lookup, and if that fails, whatismyip.com. If you don't like the idea of relying on an outside service, you could just as easily write your own, for example in PHP:
+* The script tries dyndns.org for the IP lookup. If that fails for some reason it will try whatismyipaddress.com. If you don't like the idea of relying on an outside service, you could just as easily write your own, for example in PHP:
 
         <?php print $_SERVER['REMOTE_ADDR']; ?>
 
