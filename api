@@ -24,11 +24,11 @@ LINODE_API_URL="https://api.linode.com/?api_key=$MY_API_KEY"
 function get_ip {
   local IP=`curl --silent http://checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'`
   [ "$IP" == "" ] && {
-    echo "[`date`] dyndns lookup failed, checking whatismyip..." >> $LOG_FILE
-    IP=`curl --silent http://automation.whatismyip.com/n09230945.asp`
+    echo "[`date`] dyndns lookup failed, checking whatismyipaddress..." >> $LOG_FILE
+    IP=`curl --silent http://bot.whatismyipaddress.com`
   }
   [ "$IP" == "" ] && {
-    echo "[`date`] whatismyip lookup failed, giving up." >> $LOG_FILE
+    echo "[`date`] whatismyipaddress lookup failed, giving up." >> $LOG_FILE
     exit 1;
   }
   echo $IP
